@@ -1,2 +1,2 @@
-# Python_Projects
-Python dev applications
+This repository contains python scripts for handling files.
+
