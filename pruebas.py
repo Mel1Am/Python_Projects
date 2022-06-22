@@ -1,0 +1,2 @@
+class myfirstClass:
+    pass
