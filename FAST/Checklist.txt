@@ -1,0 +1,11 @@
+1. ICC Channel created.
+2. LIAM Questionnaire.
+3. Environment Requested.
+4. MRT/AMQ Requested.
+5. Customer Environment Handbook
+6. Architecture Diagram
+7. L1 Data Mapping
+8. Integration Technical Design
+9. L2 Data Mapping
+10. L3 Data Mapping
+11. Notify Service Delivery Team
