@@ -1,8 +1,8 @@
 from itertools import count
 import tkinter as tk
 
-path2 = 'C:\\Users\\1033685\\OneDrive - Blue Yonder\\Documents\\GitHub\\Python_Projects\\FAST\\Checklist.txt'
-
+path2_w = 'C:\\Users\\1033685\\OneDrive - Blue Yonder\\Documents\\GitHub\\Python_Projects\\FAST\\Checklist.txt'
+path2_m = '/Users/lamc/Documents/GitHub/Python_Projects/FAST/Checklist.txt'
 
 window = tk.Tk()
 window.title("FAST")
@@ -15,7 +15,7 @@ Lb = tk.Listbox(window)
 Lb.config(width=100, height=100)
 
 
-checklist = open(path2,'r')
+checklist = open(path2_m,'r')
 lines = checklist.readlines()
 count = 0
 for line in lines:
