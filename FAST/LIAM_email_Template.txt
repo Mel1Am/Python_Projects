@@ -1,0 +1,18 @@
+Good day OppOwn,
+
+I am reaching out to engage with you relating the LIAM(Luminate Identity and Access Management) setup for <Put Client Here> in use with DMS for <Put Opportunity here>.
+
+My intention is to provide visibility into the LIAM registry process to accelerate the Time to Value realization in general. For DMS, onboarding a customer onto LIAM is required to enable the following at minimum:
+
+  *   Authentication/authorization for the DMS ingestion service API, which customers use to ingest their data into BY.
+  *   Data Doctor UI for customers to visual and review their data quality and issues.
+
+The ask here is to present this information to the appropriate party(usually the Technical POC or IT manager) at <Put Client Here> to gather the necessary data points and return them to us upon completion. As this process is technical in nature, we suggest leveraging the BY TAM assigned to <Put Client Here> as the technical BY POC as well as the TA assigned to the project for additional Support if necessary.
+
+Attached is a download of the questionnaire that has been partially filled out to share. Further information about the questionnaire and the LIAM federations supported please see here <https://jda365.sharepoint.com/sites/O365-azureadtribe/SitePages/LIAM-Integration-Questionnaire.aspx?OR=3DTeams-HL&CT=3D1649948183831&params=3DeyJBcHBOYW1lIjoiVGVhbXMtRGVza3RvcCIsIkFwcFZlcnNpb24iOiIyOC8yMjAzMDcwMTYxMCJ9>.
+
+Please let me know if I can assist in clarifying or answering any inquires you may have relating to this process.
+
+Thank you,
+
+<Your Signature>
