@@ -1,7 +1,7 @@
 from itertools import count
 import tkinter as tk
 
-path2_w = 'C:\\Users\\1033685\\OneDrive - Blue Yonder\\Documents\\GitHub\\Python_Projects\\FAST\\Checklist.txt'
+path2_w = 'C:\\Users\\1033685\\OneDrive - Blue Yonder\\Documents\\GitHub\\Python_Projects\\FAST\\GUI_app_v1\\Checklist.txt'
 path2_m = '/Users/lamc/Documents/GitHub/Python_Projects/FAST/Checklist.txt'
 
 window = tk.Tk()

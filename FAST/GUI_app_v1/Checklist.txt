@@ -9,3 +9,18 @@
 9. L2 Data Mapping
 10. L3 Data Mapping
 11. Notify Service Delivery Team
+
+OP-0XXXXX>
+    >Platform Integration Customer Onboarding
+        >INFRA
+            >DMS_ServerRequest
+                >SOW
+                    >ClientName_SaaS_OP.pdf
+                >IS_JIRA Ticket Template for Environment.doc
+
+        >LIAM
+            >LIAM_Questionnaire-ClientName.xlsx
+    >Prescriptive Integration Documents
+        >ClientName Integration Architecture Diagram.pt
+        >ClientName L1 Bulk.xlsx
+
