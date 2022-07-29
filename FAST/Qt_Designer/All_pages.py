@@ -10,6 +10,9 @@ LIAM_q = 'C:\\Users\\1033685\\OneDrive - Blue Yonder\\Documents\\GitHub\\Python_
 Home = uic.loadUi("C:\\Users\\1033685\\OneDrive - Blue Yonder\\Documents\\GitHub\\Python_Projects\\FAST\\Qt_Designer\\Home_Page.ui")
 NewProject = uic.loadUi("C:\\Users\\1033685\\OneDrive - Blue Yonder\\Documents\\GitHub\\Python_Projects\\FAST\\Qt_Designer\\NewProject_page.ui")
 Email = uic.loadUi("C:\\Users\\1033685\\OneDrive - Blue Yonder\\Documents\\GitHub\\Python_Projects\\FAST\\Qt_Designer\\Email_page.ui")
+Print_email = uic.loadUi("C:\\Users\\1033685\\OneDrive - Blue Yonder\\Documents\\GitHub\\Python_Projects\\FAST\\Qt_Designer\\LIAM_page.ui")
+
+
 
 #file path
 out_path = 'C:\\Users\\1033685\\OneDrive - Blue Yonder\\Documents\\GitHub\\Python_Projects\\FAST\\Qt_Designer\\out.txt'
@@ -63,6 +66,10 @@ def email_template():
     fin.close()
     fout.close()
 
+def show_email():
+    NewProject.hide()
+    Print_email.show()
+
 def regresar_home():
     NewProject.hide()
     Home.show()
@@ -86,9 +93,10 @@ def email_page():
 Home.Load_file_button.clicked.connect(salir)
 NewProject.back_button.clicked.connect(regresar_home)
 Home.New_file_button.clicked.connect(gui_NewProject)
-NewProject.continue_2.clicked.connect(email_page)
+NewProject.continue_2.clicked.connect(show_email)
 Email.back_button.clicked.connect(gui_NewProject)
 NewProject.exit_button.clicked.connect(salir)
+Print_email.Print_button.clicked.connect(email_page)
 
 #ejecutable
 Home.show()

@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="ICC_Channel_images">
+    <file>AddChannel.png</file>
+    <file>ICC_channel.png</file>
+    <file>NameChannel.png</file>
+    <file>NewChannelCreated.png</file>
+  </qresource>
+</RCC>
