@@ -10,7 +10,15 @@ def agregar_problema(problema, solucion):
     conexion = conectar_base_datos()
     cursor = conexion.cursor()
 
-    cursor.execute('INSERT INTO glosario (problema, solucion) VALUES (?, ?)', (problema, solucion))
+    cursor.execute('SELECT MAX(id) FROM glosario')
+    max_id = cursor.fetchone()[0]
+
+    if max_id is None:
+        num_problema = 1
+    else:
+        num_problema = max_id + 1
+
+    cursor.execute('INSERT INTO glosario (id, problema, solucion) VALUES (?, ?, ?)', (num_problema, problema, solucion))
     conexion.commit()
     conexion.close()
 
