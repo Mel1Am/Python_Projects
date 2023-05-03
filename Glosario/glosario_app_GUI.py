@@ -87,9 +87,9 @@ def editar_eliminar_problema():
         resultado = cursor.fetchone()
 
         if resultado:
-            accion = messagebox.askquestion("Editar o eliminar problema", "Deseas editar o eliminar el problema seleccionado?", icon="question", type="yesnocancel")
+            accion = simpledialog.askstring("Editar o eliminar problema", "Deseas 'editar', 'eliminar' o 'cancelar' el problema seleccionado?")
 
-            if accion == "yes":
+            if accion.lower() == "editar":
                 problema_editado = simpledialog.askstring("Editar problema", "Ingresa el nuevo nombre del problema:", initialvalue=resultado[1])
                 solucion_editada = simpledialog.askstring("Editar solución", "Ingresa la nueva solución:", initialvalue=resultado[2])
 
@@ -97,7 +97,7 @@ def editar_eliminar_problema():
                     cursor.execute('UPDATE glosario SET problema=?, solucion=? WHERE id=?', (problema_editado, solucion_editada, problema_id))
                     conexion.commit()
                     messagebox.showinfo("Problema editado", "El problema y la solución han sido actualizados.")
-            elif accion == "no":
+            elif accion.lower() == "eliminar":
                 cursor.execute('DELETE FROM glosario WHERE id=?', (problema_id,))
                 cursor.execute('UPDATE glosario SET id = id - 1 WHERE id > ?', (problema_id,))
                 conexion.commit()
@@ -108,6 +108,7 @@ def editar_eliminar_problema():
             messagebox.showerror("Error", "No se encontró el problema con el ID especificado.")
 
         conexion.close()
+
 
 def ajustar_columnas(treeview):
     for column in treeview["columns"]:
@@ -155,22 +156,32 @@ def listar_problemas_gui():
 
 
 def buscar_problema_gui():
-    consulta = simpledialog.askstring("Buscar problema", "Introduce palabras clave del problema/error que deseas buscar:")
+    consulta = simpledialog.askstring("Buscar problema", "Ingresa palabras clave para buscar un problema:")
 
     if consulta:
         resultados = buscar_problema(consulta)
+        buscar_problema_window = tk.Toplevel()
+        buscar_problema_window.title("Resultados de búsqueda")
 
-        window = tk.Toplevel()
-        window.title("Resultados de búsqueda")
+        text_widget = tk.Text(buscar_problema_window, wrap=tk.NONE)
+        text_widget.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-        treeview = ttk.Treeview(window, columns=("id", "problema", "solucion"), show="headings")
-        treeview.heading("id", text="ID")
-        treeview.heading("problema", text="Problema")
-        treeview.heading("solucion", text="Solución")
-        treeview.pack(fill=tk.BOTH, expand=True)
+        scroll_y = tk.Scrollbar(buscar_problema_window, orient=tk.VERTICAL, command=text_widget.yview)
+        scroll_y.pack(side=tk.RIGHT, fill=tk.Y)
 
-        for resultado in resultados:
-            treeview.insert("", "end", values=resultado)
+        scroll_x = tk.Scrollbar(buscar_problema_window, orient=tk.HORIZONTAL, command=text_widget.xview)
+        scroll_x.pack(side=tk.BOTTOM, fill=tk.X)
+
+        text_widget.config(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
+
+        if resultados:
+            for resultado in resultados:
+                text_widget.insert(tk.END, f"ID: {resultado[0]}\nProblema: {resultado[1]}\nSolución: {resultado[2]}\n\n")
+        else:
+            text_widget.insert(tk.END, "No se encontraron resultados para la búsqueda.")
+
+        text_widget.config(state=tk.DISABLED)
+
 
 
 '''def main():
