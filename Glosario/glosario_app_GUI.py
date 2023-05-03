@@ -77,6 +77,47 @@ def buscar_problema(consulta):
     return opcion
     '''
 
+def editar_eliminar_problema():
+    problema_id = simpledialog.askinteger("Editar o eliminar problema", "Ingresa el ID del problema que deseas editar o eliminar:")
+
+    if problema_id is not None:
+        conexion = conectar_base_datos()
+        cursor = conexion.cursor()
+        cursor.execute('SELECT id, problema, solucion FROM glosario WHERE id=?', (problema_id,))
+        resultado = cursor.fetchone()
+
+        if resultado:
+            accion = messagebox.askquestion("Editar o eliminar problema", "Deseas editar o eliminar el problema seleccionado?", icon="question", type="yesnocancel")
+
+            if accion == "yes":
+                problema_editado = simpledialog.askstring("Editar problema", "Ingresa el nuevo nombre del problema:", initialvalue=resultado[1])
+                solucion_editada = simpledialog.askstring("Editar solución", "Ingresa la nueva solución:", initialvalue=resultado[2])
+
+                if problema_editado and solucion_editada:
+                    cursor.execute('UPDATE glosario SET problema=?, solucion=? WHERE id=?', (problema_editado, solucion_editada, problema_id))
+                    conexion.commit()
+                    messagebox.showinfo("Problema editado", "El problema y la solución han sido actualizados.")
+            elif accion == "no":
+                cursor.execute('DELETE FROM glosario WHERE id=?', (problema_id,))
+                conexion.commit()
+                messagebox.showinfo("Problema eliminado", "El problema y la solución han sido eliminados.")
+            else:
+                messagebox.showinfo("Acción cancelada", "Operación cancelada, regresando al menú principal.")
+        else:
+            messagebox.showerror("Error", "No se encontró el problema con el ID especificado.")
+
+        conexion.close()
+
+def ajustar_columnas(treeview):
+    for column in treeview["columns"]:
+        treeview.column(column, width=tk.StringVar())
+
+    treeview.bind("<Configure>", lambda event, treeview=treeview: auto_ajustar_columnas(event, treeview))
+
+def auto_ajustar_columnas(event, treeview):
+    for column in treeview["columns"]:
+        treeview.column(column, width=max(treeview.column(column)["width"], treeview.bbox("all", column)[2]))
+
 def agregar_problema_gui():
     problema = simpledialog.askstring("Agregar problema", "Introduce el problema/error:")
     solucion = simpledialog.askstring("Agregar solución", "Introduce la solución propuesta o aproximada:")
@@ -145,22 +186,26 @@ def main():
     root = tk.Tk()
     root.title("Glosario de problemas y soluciones")
 
-    frame = tk.Frame(root, padx=20, pady=20)
-    frame.pack()
+    frame = tk.Frame(root)
+    frame.pack(padx=20, pady=20)
 
     agregar_button = tk.Button(frame, text="Agregar problema y solución", command=agregar_problema_gui)
-    agregar_button.pack(fill=tk.X, pady=(0, 10))
+    agregar_button.pack(fill=tk.X, pady=5)
 
-    listar_button = tk.Button(frame, text="Listar problemas", command=listar_problemas_gui)
-    listar_button.pack(fill=tk.X, pady=(0, 10))
+    listar_button = tk.Button(frame, text="Listar problemas y soluciones", command=listar_problemas_gui)
+    listar_button.pack(fill=tk.X, pady=5)
 
-    buscar_button = tk.Button(frame, text="Buscar problema por palabras clave", command=buscar_problema_gui)
-    buscar_button.pack(fill=tk.X)
+    buscar_button = tk.Button(frame, text="Buscar problema por palabra clave", command=buscar_problema_gui)
+    buscar_button.pack(fill=tk.X, pady=5)
 
-    salir_button = tk.Button(frame, text="Salir", command=root.quit)
-    salir_button.pack(fill=tk.X, pady=(10, 0))
+    editar_eliminar_button = tk.Button(frame, text="Editar o eliminar problema", command=editar_eliminar_problema)
+    editar_eliminar_button.pack(fill=tk.X, pady=5)
+
+    salir_button = tk.Button(frame, text="Salir", command=root.destroy)
+    salir_button.pack(fill=tk.X, pady=5)
 
     root.mainloop()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
+
