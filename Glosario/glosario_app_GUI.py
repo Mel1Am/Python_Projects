@@ -6,10 +6,7 @@ from tkinter import messagebox, simpledialog, ttk
 def conectar_base_datos():
     return sqlite3.connect('glosario.db')
 
-def agregar_problema():
-    problema = input("Introduce el problema/error: ")
-    solucion = input("Introduce la solución propuesta o aproximada: ")
-
+def agregar_problema(problema, solucion):
     conexion = conectar_base_datos()
     cursor = conexion.cursor()
 
@@ -17,8 +14,6 @@ def agregar_problema():
     conexion.commit()
     conexion.close()
 
-    print("Problema y solución agregados con éxito.\n")
-    input("Presiona Enter para regresar al menú principal...")
 
 def listar_problemas():
     conexion = conectar_base_datos()
@@ -59,28 +54,17 @@ def mostrar_solucion(id_problema):
 
     input("Presiona Enter para regresar al menú principal...")
 
-def buscar_problema():
-    consulta = input("Introduce palabras clave del problema/error que deseas buscar: ")
-
+def buscar_problema(consulta):
+    consulta = f"%{consulta}%"
     conexion = conectar_base_datos()
     cursor = conexion.cursor()
 
-    cursor.execute('SELECT problema, solucion FROM glosario WHERE problema LIKE ?', (f'%{consulta}%',))
+    cursor.execute('SELECT id, problema, solucion FROM glosario WHERE problema LIKE ?', (consulta,))
     resultados = cursor.fetchall()
     conexion.close()
 
-    if resultados:
-        print("\nResultados encontrados:")
-        for problema, solucion in resultados:
-            print(f"Problema: {problema}\nSolución: {solucion}\n")
-    else:
-        print("\nNo se encontró el problema/error en el glosario.\n")
-        agregar_nuevo_problema = input("Lo lamento, no tengo guardado ese error, ¿deseas añadirlo? (s/n): ")
-        if agregar_nuevo_problema.lower() == 's':
-            agregar_problema()
-            return
+    return resultados
 
-    input("Presiona Enter para regresar al menú principal...")
 
 '''def menu_principal():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -99,12 +83,14 @@ def agregar_problema_gui():
 
     if problema and solucion:
         agregar_problema(problema, solucion)
+        messagebox.showinfo("Problema agregado", "El problema y la solución se han agregado al glosario.")
 
 def listar_problemas_gui():
     window = tk.Toplevel()
     window.title("Listar problemas")
 
-    treeview = ttk.Treeview(window, columns=("problema", "solucion"), show="headings")
+    treeview = ttk.Treeview(window, columns=("id", "problema", "solucion"), show="headings")
+    treeview.heading("id", text="ID")
     treeview.heading("problema", text="Problema")
     treeview.heading("solucion", text="Solución")
     treeview.pack(fill=tk.BOTH, expand=True)
@@ -128,7 +114,8 @@ def buscar_problema_gui():
         window = tk.Toplevel()
         window.title("Resultados de búsqueda")
 
-        treeview = ttk.Treeview(window, columns=("problema", "solucion"), show="headings")
+        treeview = ttk.Treeview(window, columns=("id", "problema", "solucion"), show="headings")
+        treeview.heading("id", text="ID")
         treeview.heading("problema", text="Problema")
         treeview.heading("solucion", text="Solución")
         treeview.pack(fill=tk.BOTH, expand=True)
