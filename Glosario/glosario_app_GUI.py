@@ -110,15 +110,22 @@ def editar_eliminar_problema():
 
             if resultado:
                 cursor.execute('DELETE FROM glosario WHERE id=?', (problema_id,))
-                cursor.execute('UPDATE glosario SET id = id - 1 WHERE id > ?', (problema_id,))
                 conexion.commit()
                 messagebox.showinfo("Problema eliminado", "El problema y la solución han sido eliminados.")
+                actualizar_ids(problema_id)
             else:
                 messagebox.showerror("Error", "No se encontró el problema con el ID especificado.")
 
             conexion.close()
     else:
         messagebox.showinfo("Acción cancelada", "Operación cancelada, regresando al menú principal.")
+
+def actualizar_ids(id_eliminar):
+    conexion = conectar_base_datos()
+    cursor = conexion.cursor()
+    cursor.execute('UPDATE glosario SET id = id - 1 WHERE id > ?', (id_eliminar,))
+    conexion.commit()
+    conexion.close()
 
 def ajustar_columnas(treeview):
     for column in treeview["columns"]:
