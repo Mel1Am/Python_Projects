@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Problema</title>
+</head>
+<body>
+    <h1>Editar Problema</h1>
+    <form action="/editar/{{ data[0] }}" method="post">
+        <input type="hidden" name="id" value="{{ data[0] }}">
+        <label for="problema">Problema:</label>
+        <input type="text" id="problema" name="problema" value="{{ data[1] }}" required>
+        <br>
+        <label for="solucion">Solución:</label>
+        <input type="text" id="solucion" name="solucion" value="{{ data[2] }}" required>
+        <br>
+        <input type="submit" value="Guardar">
+    </form>
+    <a href="{{ url_for('index') }}">Regresar</a>
+</body>
+</html>

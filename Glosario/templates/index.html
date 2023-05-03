@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glosario de Problemas y Soluciones</title>
+</head>
+<body>
+    <h1>Glosario de Problemas y Soluciones</h1>
+    <a href="{{ url_for('agregar_problema') }}">Agregar problema y solución</a>
+    <br>
+    <br>
+    <form action="{{ url_for('buscar') }}" method="post">
+        <label for="consulta">Buscar problema por palabras clave:</label>
+        <input type="text" id="consulta" name="consulta" required>
+        <input type="submit" value="Buscar">
+    </form>
+    <br>
+    <a href="{{ url_for('editar_eliminar') }}">Editar o eliminar problema</a>
+    <br>
+    <a href="#">Salir</a>
+</body>
+</html>
