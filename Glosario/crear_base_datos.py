@@ -3,10 +3,12 @@ import sqlite3
 def crear_base_datos():
     conexion = sqlite3.connect('glosario.db')
     cursor = conexion.cursor()
+ 
     
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS glosario (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            num_problema INTEGER,
             problema TEXT NOT NULL,
             solucion TEXT NOT NULL
         );

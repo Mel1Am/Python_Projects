@@ -4,11 +4,7 @@ import tkinter as tk
 from tkinter import messagebox, simpledialog, ttk
 
 def conectar_base_datos():
-    conexion = sqlite3.connect('glosario.db')
-    cursor = conexion.cursor()
-    cursor.execute('CREATE TABLE IF NOT EXISTS glosario (id INTEGER PRIMARY KEY AUTOINCREMENT, num_problema INTEGER, problema TEXT, solucion TEXT)')
-    return conexion
-
+    return sqlite3.connect('glosario.db')
 
 def agregar_problema(problema, solucion):
     conexion = conectar_base_datos()
@@ -21,7 +17,7 @@ def agregar_problema(problema, solucion):
 def listar_problemas(imprimir_id=False):
     conexion = conectar_base_datos()
     cursor = conexion.cursor()
-    cursor.execute('SELECT num_problema, problema, solucion FROM glosario ORDER BY num_problema')
+    cursor.execute('SELECT id, problema, solucion FROM glosario ORDER BY id')
 
     problemas = cursor.fetchall()
     lista_problemas = ''
