@@ -99,6 +99,7 @@ def editar_eliminar_problema():
                     messagebox.showinfo("Problema editado", "El problema y la solución han sido actualizados.")
             elif accion == "no":
                 cursor.execute('DELETE FROM glosario WHERE id=?', (problema_id,))
+                cursor.execute('UPDATE glosario SET id = id - 1 WHERE id > ?', (problema_id,))
                 conexion.commit()
                 messagebox.showinfo("Problema eliminado", "El problema y la solución han sido eliminados.")
             else:
@@ -127,23 +128,30 @@ def agregar_problema_gui():
         messagebox.showinfo("Problema agregado", "El problema y la solución se han agregado al glosario.")
 
 def listar_problemas_gui():
-    window = tk.Toplevel()
-    window.title("Listar problemas")
-
-    treeview = ttk.Treeview(window, columns=("id", "problema", "solucion"), show="headings")
-    treeview.heading("id", text="ID")
-    treeview.heading("problema", text="Problema")
-    treeview.heading("solucion", text="Solución")
-    treeview.pack(fill=tk.BOTH, expand=True)
-
     conexion = conectar_base_datos()
     cursor = conexion.cursor()
-    cursor.execute('SELECT id, problema, solucion FROM glosario')
+    cursor.execute("SELECT id, problema, solucion FROM glosario")
     resultados = cursor.fetchall()
     conexion.close()
 
+    listar_problemas_window = tk.Toplevel()
+    listar_problemas_window.title("Lista de problemas y soluciones")
+
+    text_widget = tk.Text(listar_problemas_window, wrap=tk.NONE)
+    text_widget.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+    scroll_y = tk.Scrollbar(listar_problemas_window, orient=tk.VERTICAL, command=text_widget.yview)
+    scroll_y.pack(side=tk.RIGHT, fill=tk.Y)
+
+    scroll_x = tk.Scrollbar(listar_problemas_window, orient=tk.HORIZONTAL, command=text_widget.xview)
+    scroll_x.pack(side=tk.BOTTOM, fill=tk.X)
+
+    text_widget.config(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
+
     for resultado in resultados:
-        treeview.insert("", "end", values=resultado)
+        text_widget.insert(tk.END, f"ID: {resultado[0]}\nProblema: {resultado[1]}\nSolución: {resultado[2]}\n\n")
+
+    text_widget.config(state=tk.DISABLED)
 
 
 def buscar_problema_gui():
