@@ -18,6 +18,16 @@ def init_db():
     connection.commit()
     connection.close()
 
+@app.route('/buscar', methods=['POST'])
+def buscar():
+    termino_busqueda = request.form['termino_busqueda']
+    with sqlite3.connect("glosario.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM glosario WHERE problema LIKE ? OR solucion LIKE ?", ('%' + termino_busqueda + '%', '%' + termino_busqueda + '%'))
+        rows = cursor.fetchall()
+    return render_template('index.html', data=rows)
+
+
 @app.route('/')
 def index():
     connection = create_connection()
@@ -39,8 +49,8 @@ def agregar_problema():
     connection.close()
     return redirect(url_for('index'))
 
-@app.route('/editar/<int:id>', methods=['GET', 'POST'])
-def editar_problema(id):
+@app.route('/editar_eliminar', methods=['GET', 'POST'])
+def editar_eliminar():
     connection = create_connection()
     cursor = connection.cursor()
 
