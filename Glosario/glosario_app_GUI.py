@@ -4,7 +4,11 @@ import tkinter as tk
 from tkinter import messagebox, simpledialog, ttk
 
 def conectar_base_datos():
-    return sqlite3.connect('glosario.db')
+    conexion = sqlite3.connect('glosario.db')
+    cursor = conexion.cursor()
+    cursor.execute('CREATE TABLE IF NOT EXISTS glosario (id INTEGER PRIMARY KEY AUTOINCREMENT, num_problema INTEGER, problema TEXT, solucion TEXT)')
+    return conexion
+
 
 def agregar_problema(problema, solucion):
     conexion = conectar_base_datos()
@@ -14,28 +18,25 @@ def agregar_problema(problema, solucion):
     conexion.commit()
     conexion.close()
 
-
-def listar_problemas():
+def listar_problemas(imprimir_id=False):
     conexion = conectar_base_datos()
     cursor = conexion.cursor()
+    cursor.execute('SELECT num_problema, problema, solucion FROM glosario ORDER BY num_problema')
 
-    cursor.execute('SELECT id, problema FROM glosario')
-    resultados = cursor.fetchall()
-    conexion.close()
+    problemas = cursor.fetchall()
+    lista_problemas = ''
 
-    if resultados:
-        print("Problemas listados:")
-        for id, problema in resultados:
-            print(f"{id}. {problema}")
-        
-        id_problema = int(input("\nIntroduce el número del problema para ver su solución: "))
-        
-        os.system('cls' if os.name == 'nt' else 'clear')
-        mostrar_solucion(id_problema)
+    for problema in problemas:
+        if imprimir_id:
+            lista_problemas += f'ID: {problema[0]}\n'
+        lista_problemas += f'Problema: {problema[1]}\nSolución: {problema[2]}\n\n'
+
+    if lista_problemas:
+        messagebox.showinfo("Lista de problemas", lista_problemas)
     else:
-        print("No hay problemas guardados en el glosario.\n")
-        input("Presiona Enter para regresar al menú principal...")
+        messagebox.showinfo("Lista de problemas", "No hay problemas en la base de datos.")
 
+    conexion.close()
 
 def mostrar_solucion(id_problema):
     conexion = conectar_base_datos()
@@ -65,7 +66,6 @@ def buscar_problema(consulta):
 
     return resultados
 
-
 '''def menu_principal():
     os.system('cls' if os.name == 'nt' else 'clear')
     print("Glosario de problemas y soluciones")
@@ -78,18 +78,20 @@ def buscar_problema(consulta):
     '''
 
 def editar_eliminar_problema():
-    problema_id = simpledialog.askinteger("Editar o eliminar problema", "Ingresa el ID del problema que deseas editar o eliminar:")
+    listar_problemas(True)
 
-    if problema_id is not None:
-        conexion = conectar_base_datos()
-        cursor = conexion.cursor()
-        cursor.execute('SELECT id, problema, solucion FROM glosario WHERE id=?', (problema_id,))
-        resultado = cursor.fetchone()
+    accion = simpledialog.askstring("Editar o eliminar problema", "Deseas 'editar', 'eliminar' o 'cancelar' el problema seleccionado?")
 
-        if resultado:
-            accion = simpledialog.askstring("Editar o eliminar problema", "Deseas 'editar', 'eliminar' o 'cancelar' el problema seleccionado?")
+    if accion.lower() == "editar":
+        problema_id = simpledialog.askinteger("Editar problema", "Ingresa el ID del problema que deseas editar:")
 
-            if accion.lower() == "editar":
+        if problema_id is not None:
+            conexion = conectar_base_datos()
+            cursor = conexion.cursor()
+            cursor.execute('SELECT id, problema, solucion FROM glosario WHERE id=?', (problema_id,))
+            resultado = cursor.fetchone()
+
+            if resultado:
                 problema_editado = simpledialog.askstring("Editar problema", "Ingresa el nuevo nombre del problema:", initialvalue=resultado[1])
                 solucion_editada = simpledialog.askstring("Editar solución", "Ingresa la nueva solución:", initialvalue=resultado[2])
 
@@ -97,18 +99,30 @@ def editar_eliminar_problema():
                     cursor.execute('UPDATE glosario SET problema=?, solucion=? WHERE id=?', (problema_editado, solucion_editada, problema_id))
                     conexion.commit()
                     messagebox.showinfo("Problema editado", "El problema y la solución han sido actualizados.")
-            elif accion.lower() == "eliminar":
+            else:
+                messagebox.showerror("Error", "No se encontró el problema con el ID especificado.")
+
+            conexion.close()
+    elif accion.lower() == "eliminar":
+        problema_id = simpledialog.askinteger("Eliminar problema", "Ingresa el ID del problema que deseas eliminar:")
+
+        if problema_id is not None:
+            conexion = conectar_base_datos()
+            cursor = conexion.cursor()
+            cursor.execute('SELECT id, problema, solucion FROM glosario WHERE id=?', (problema_id,))
+            resultado = cursor.fetchone()
+
+            if resultado:
                 cursor.execute('DELETE FROM glosario WHERE id=?', (problema_id,))
                 cursor.execute('UPDATE glosario SET id = id - 1 WHERE id > ?', (problema_id,))
                 conexion.commit()
                 messagebox.showinfo("Problema eliminado", "El problema y la solución han sido eliminados.")
             else:
-                messagebox.showinfo("Acción cancelada", "Operación cancelada, regresando al menú principal.")
-        else:
-            messagebox.showerror("Error", "No se encontró el problema con el ID especificado.")
+                messagebox.showerror("Error", "No se encontró el problema con el ID especificado.")
 
-        conexion.close()
-
+            conexion.close()
+    else:
+        messagebox.showinfo("Acción cancelada", "Operación cancelada, regresando al menú principal.")
 
 def ajustar_columnas(treeview):
     for column in treeview["columns"]:
@@ -154,7 +168,6 @@ def listar_problemas_gui():
 
     text_widget.config(state=tk.DISABLED)
 
-
 def buscar_problema_gui():
     consulta = simpledialog.askstring("Buscar problema", "Ingresa palabras clave para buscar un problema:")
 
@@ -181,8 +194,6 @@ def buscar_problema_gui():
             text_widget.insert(tk.END, "No se encontraron resultados para la búsqueda.")
 
         text_widget.config(state=tk.DISABLED)
-
-
 
 '''def main():
     while True:
