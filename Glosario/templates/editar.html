@@ -11,11 +11,12 @@
     <form action="{{ url_for('editar_eliminar', id=data[0]) }}" method="post">
         <input type="hidden" name="id" value="{{ data[0] }}">
         <label for="problema">Problema:</label>
-        <input type="text" id="problema" name="problema" value="{{ data[1] }}" required>
+        <textarea id="problema" name="problema" rows="4" cols="50" required>{{ data[1] }}</textarea>
         <br>
         <label for="solucion">Solución:</label>
-        <input type="text" id="solucion" name="solucion" value="{{ data[2] }}" required>
+        <textarea id="solucion" name="solucion" rows="4" cols="50" required>{{ data[2] }}</textarea>
         <br>
+
         <input type="submit" value="Guardar">
     </form>
     <a href="{{ url_for('index') }}">Regresar al menú principal</a>

@@ -12,11 +12,12 @@
     <h1>Agregar Problema</h1>
     <form action="{{ url_for('agregar_problema') }}" method="post">
         <label for="problema">Problema:</label>
-        <input type="text" id="problema" name="problema" required>
+        <textarea id="problema" name="problema" rows="4" cols="50" required></textarea>
         <br>
         <label for="solucion">Solución:</label>
-        <input type="text" id="solucion" name="solucion" required>
+        <textarea id="solucion" name="solucion" rows="4" cols="50" required></textarea>
         <br>
+
         <input type="submit" value="Guardar">
     </form>
     <a href="{{ url_for('index') }}">Regresar al menú principal</a>

@@ -15,21 +15,22 @@
         <input type="text" name="termino_busqueda" placeholder="Buscar problema...">
         <input type="submit" value="Buscar">
     </form>
-    <a href="{{ url_for('mostrar_agregar_problema') }}">Agregar problema</a>
+    <a id="agregar-problema" href="{{ url_for('mostrar_agregar_problema') }}">Agregar problema</a>
 
     <h2>Problemas</h2>
     <ul>
-        {% for row in data %}
-            <li>
-                {{ row[1] }} 
-                <button class="reveal-solution">Mostrar solución</button>
-                <div class="solution" style="display:none;">{{ row[2] }}</div>
-                <a href="{{ url_for('editar_eliminar', id=row[0]) }}">Editar problema</a>
-                <a href="{{ url_for('eliminar_problema', id=row[0]) }}">Eliminar problema</a>
-            </li>
-        {% endfor %}
-        </ul>    
-    
+    {% for row in data %}
+        <li>
+            <span class="problema">{{ row[1] }}</span>
+            <button class="reveal-solution">Mostrar solución</button>
+            <br>
+            <a href="{{ url_for('editar_eliminar', id=row[0]) }}">Editar problema</a>
+            <a href="{{ url_for('eliminar_problema', id=row[0]) }}">Eliminar problema</a>
+            <div class="solution" style="display:none;">{{ row[2] }}</div>
+        </li>
+    {% endfor %}
+    </ul>
+   
     <a href="{{ url_for('index') }}">Regresar al menú principal</a>
     
 </body>
