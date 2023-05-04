@@ -3,23 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Problema</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Editar Problema</title>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Editar Problema</h1>
-    <form action="{{ url_for('editar_eliminar', id=data[0]) }}" method="post">
-        <input type="hidden" name="id" value="{{ data[0] }}">
+    <h1>Agregar Problema</h1>
+    <form action="{{ url_for('agregar_problema') }}" method="post">
         <label for="problema">Problema:</label>
-        <input type="text" id="problema" name="problema" value="{{ data[1] }}" required>
+        <input type="text" id="problema" name="problema" required>
         <br>
         <label for="solucion">Solución:</label>
-        <input type="text" id="solucion" name="solucion" value="{{ data[2] }}" required>
+        <input type="text" id="solucion" name="solucion" required>
         <br>
         <input type="submit" value="Guardar">
     </form>
     <a href="{{ url_for('index') }}">Regresar al menú principal</a>
-
-    
 </body>
 </html>

@@ -49,8 +49,12 @@ def agregar_problema():
     connection.close()
     return redirect(url_for('index'))
 
-@app.route('/editar_eliminar', methods=['GET', 'POST'])
-def editar_eliminar():
+@app.route('/mostrar_agregar_problema')
+def mostrar_agregar_problema():
+    return render_template('agregar.html')
+
+@app.route('/editar_eliminar/<int:id>', methods=['GET', 'POST'])
+def editar_eliminar(id):
     connection = create_connection()
     cursor = connection.cursor()
 
